@@ -339,12 +339,11 @@
     <!-- الترويسة -->
     <div class="hero">
       <span class="crown">👑</span>
-      <h1>لوحة المتصدرين</h1>
-      <p>تابعي ترتيب التخصصات حسب مجموع النقاط</p>
-
-      <div class="hero-photo">
+          <div class="hero-photo">
         <img src="images/header.jpeg" alt="صورة الترويسة">
       </div>
+        <h1>لوحة المتصدرين</h1>
+     
     </div>
 
     <!-- لوحة المتصدرين -->
@@ -394,8 +393,8 @@
   /* ==========================================================
      ضعي هنا رابط تطبيق الويب (Apps Script) الذي ينتهي بـ /exec
      ========================================================== */
-  const API_URL = 'https://script.google.com/macros/s/AKfycbznR8zfR9RlWkbKzszy1rh5ZyXDMW_6O04794XG5Oxsa4i0ShH5Pcx9SgWe0l22oOu-
-
+  const API_URL = 'https://script.google.com/macros/s/AKfycbznR8zfR9RlWkbKzszy1rh5ZyXDMW_6O04794XG5Oxsa4i0ShH5Pcx9SgWe0l22oOu-pQ/exec'
+  
   /* ===== تحميل النقاط ===== */
   function loadScores() {
     fetch(API_URL)
