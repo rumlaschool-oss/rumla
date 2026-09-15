@@ -20,6 +20,8 @@
     --cream: #fffaf5;
     --ink: #3a2432;
     --muted: #9b8a90;
+    --danger: #b23a52;
+    --danger-dark: #8e2c40;
   }
 
   *{ box-sizing: border-box; }
@@ -36,9 +38,7 @@
     min-height:100vh;
   }
 
-  /* ============================================
-     الشعار الثابت — أعلى اليسار، لا يتحرك أبداً
-     ============================================ */
+  /* الشعار الثابت — أعلى اليسار، لا يتحرك أبداً */
   .fixed-logo{
     position: fixed;
     top: 16px;
@@ -59,7 +59,7 @@
   .fixed-logo img{
     width:100%;
     height:100%;
-    object-fit: contain;   /* تظهر الصورة كاملة بدون قص */
+    object-fit: contain;
     display:block;
   }
 
@@ -70,13 +70,11 @@
     padding:28px 0 50px;
   }
 
-  /* ============================================
-     الترويسة (تصميم جديد)
-     ============================================ */
+  /* الترويسة — الصورة أعلى، والعنوان أسفلها */
   .hero{
     position:relative;
     text-align:center;
-    padding: 34px 20px 28px;
+    padding: 26px 20px 30px;
     margin-bottom:30px;
     border-radius:26px;
     background: linear-gradient(180deg, #ffffff, var(--blush));
@@ -93,6 +91,24 @@
     background: linear-gradient(90deg, var(--burgundy-dark), var(--gold), var(--burgundy-dark));
   }
 
+  .hero-photo{
+    width: 100%;
+    max-width: 420px;
+    height: 150px;
+    margin: 10px auto 20px;
+    border-radius:18px;
+    overflow:hidden;
+    box-shadow: 0 10px 24px rgba(124,42,73,0.16);
+    border: 4px solid #fff;
+  }
+
+  .hero-photo img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+  }
+
   .hero .crown{
     font-size:24px;
     display:block;
@@ -107,33 +123,13 @@
   }
 
   .hero p{
-    margin:10px 0 20px;
+    margin:10px 0 0;
     color: var(--muted);
     font-size:15px;
     font-weight:500;
   }
 
-  .hero-photo{
-    width: 100%;
-    max-width: 420px;
-    height: 150px;
-    margin: 0 auto;
-    border-radius:18px;
-    overflow:hidden;
-    box-shadow: 0 10px 24px rgba(124,42,73,0.16);
-    border: 4px solid #fff;
-  }
-
-  .hero-photo img{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    display:block;
-  }
-
-  /* ============================================
-     لوحة المتصدرين
-     ============================================ */
+  /* لوحة المتصدرين */
   .leaderboard{
     background: linear-gradient(180deg, #ffffff, #fffdfb);
     border-radius:22px;
@@ -217,9 +213,7 @@
     border-radius:999px;
   }
 
-  /* ============================================
-     نماذج الإدخال
-     ============================================ */
+  /* نماذج الإدخال */
   .forms{
     display:grid;
     grid-template-columns:1fr 1fr;
@@ -272,7 +266,7 @@
   button{
     width:100%;
     padding:14px;
-    margin-top:16px;
+    margin-top:12px;
     border:none;
     border-radius:12px;
     background: linear-gradient(135deg, var(--burgundy), var(--burgundy-dark));
@@ -287,6 +281,30 @@
 
   button:hover{ transform: translateY(-2px); box-shadow: 0 10px 22px rgba(124,42,73,0.36); }
   button:disabled{ opacity:0.6; cursor:not-allowed; transform:none; }
+
+  .button-row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+  }
+  .button-row button{ margin-top:12px; }
+
+  button.danger{
+    background: linear-gradient(135deg, var(--danger), var(--danger-dark));
+    box-shadow: 0 8px 18px rgba(178,58,82,0.28);
+  }
+  button.danger:hover{ box-shadow: 0 10px 22px rgba(178,58,82,0.36); }
+
+  button.outline{
+    background: #fff;
+    color: var(--burgundy-dark);
+    border: 1.5px solid rgba(124,42,73,0.35);
+    box-shadow:none;
+  }
+  button.outline:hover{
+    background: var(--blush);
+    box-shadow:none;
+  }
 
   .message{
     text-align:center;
@@ -307,16 +325,40 @@
     font-weight:600;
   }
 
-  /* ============================================
-     الجوال
-     ============================================ */
+  /* منطقة خطِرة */
+  .danger-zone{
+    margin-top:22px;
+    background: linear-gradient(180deg, #fff6f3, #fdeceb);
+    border-radius:22px;
+    padding:22px;
+    border: 1px solid rgba(178,58,82,0.25);
+    box-shadow: 0 10px 26px rgba(178,58,82,0.08);
+  }
+
+  .danger-zone h2{
+    margin:0 0 6px;
+    text-align:center;
+    color: var(--danger-dark);
+    font-size:18px;
+    font-weight:900;
+  }
+
+  .danger-zone p{
+    text-align:center;
+    color: var(--muted);
+    font-size:13.5px;
+    margin:0 0 4px;
+  }
+
+  /* الجوال */
   @media (max-width: 700px){
     .fixed-logo{ width:56px; height:56px; top:10px; left:10px; border-radius:14px; }
     .container{ width:94%; padding-top:12px; }
-    .hero{ padding:26px 14px 22px; }
+    .hero{ padding:20px 14px 24px; }
     .hero h1{ font-size:24px; }
     .hero-photo{ height:110px; }
     .forms{ grid-template-columns:1fr; }
+    .button-row{ grid-template-columns:1fr; }
     .score-row{ padding:12px; }
     .rank{ width:36px; height:36px; font-size:15px; }
     .rank.medal{ font-size:19px; }
@@ -329,21 +371,20 @@
 
 <body>
 
-  <!-- الشعار الثابت أعلى اليسار — لا يتحرك مع التمرير -->
   <div class="fixed-logo">
     <img src="images/logo.jpeg" alt="شعار المدرسة">
   </div>
 
   <div class="container">
 
-    <!-- الترويسة -->
+    <!-- الترويسة: الصورة أعلى، والعنوان أسفلها -->
     <div class="hero">
-      <span class="crown">👑</span>
-          <div class="hero-photo">
+      <div class="hero-photo">
         <img src="images/header.jpeg" alt="صورة الترويسة">
       </div>
-        <h1>لوحة المتصدرين</h1>
-     
+      <span class="crown">👑</span>
+      <h1>لوحة المتصدرين</h1>
+      <p>تابعي ترتيب التخصصات حسب مجموع النقاط</p>
     </div>
 
     <!-- لوحة المتصدرين -->
@@ -358,7 +399,7 @@
     <div class="forms">
 
       <div class="card">
-        <h2>➕ إضافة نقاط</h2>
+        <h2>🏅 إدارة النقاط</h2>
 
         <label class="field-label">التخصص</label>
         <select id="specialtySelect">
@@ -368,40 +409,57 @@
         <label class="field-label">عدد النقاط</label>
         <input type="number" id="pointsInput" min="1" placeholder="مثال: 10">
 
-        <button id="addScoreButton" onclick="addScore()">إضافة النقاط</button>
+        <div class="button-row">
+          <button id="addScoreButton" onclick="addScore()">➕ إضافة</button>
+          <button id="removeScoreButton" class="danger" onclick="removeScore()">➖ حذف</button>
+        </div>
 
         <div id="scoreMessage" class="message"></div>
       </div>
 
       <div class="card">
-        <h2>📝 إضافة تخصص جديد</h2>
+        <h2>📝 إدارة التخصصات</h2>
 
-        <label class="field-label">اسم التخصص</label>
+        <label class="field-label">اسم التخصص الجديد</label>
         <input type="text" id="specialtyInput" placeholder="اكتبي اسم التخصص">
 
         <button id="addSpecialtyButton" onclick="addSpecialty()">إضافة التخصص</button>
+
+        <label class="field-label">حذف تخصص موجود</label>
+        <select id="deleteSpecialtySelect">
+          <option value="">اختر التخصص</option>
+        </select>
+
+        <button id="deleteSpecialtyButton" class="danger" onclick="deleteSpecialty()">🗑️ حذف التخصص</button>
 
         <div id="specialtyMessage" class="message"></div>
       </div>
 
     </div>
 
+    <!-- منطقة خطِرة -->
+    <div class="danger-zone">
+      <h2>⚠️ إعادة ضبط النقاط</h2>
+      <p>سيتم تصفير نقاط جميع التخصصات دون حذفها.</p>
+      <button id="resetAllButton" class="outline" onclick="resetAllScores()">إعادة ضبط جميع النقاط</button>
+      <div id="resetMessage" class="message"></div>
+    </div>
+
   </div>
 
 <script>
 
-  /* ==========================================================
-     ضعي هنا رابط تطبيق الويب (Apps Script) الذي ينتهي بـ /exec
-     ========================================================== */
-  const API_URL = 'https://script.google.com/macros/s/AKfycbznR8zfR9RlWkbKzszy1rh5ZyXDMW_6O04794XG5Oxsa4i0ShH5Pcx9SgWe0l22oOu-pQ/exec'
-  
+  /* ضعي هنا رابط تطبيق الويب (Apps Script) الذي ينتهي بـ /exec */
+  const API_URL = 'https://script.google.com/macros/s/AKfycbxtY__oowjzs-wl_kzEQteE7eum25rZlbG06-N9KdbrX0XYMx7REriFTMKLUcnWVSCAJg/exec';
+
+
   /* ===== تحميل النقاط ===== */
   function loadScores() {
     fetch(API_URL)
       .then(r => r.json())
       .then(data => {
         displayScores(data);
-        updateSpecialtySelect(data);
+        updateSpecialtySelects(data);
       })
       .catch(err => {
         console.error(err);
@@ -439,30 +497,42 @@
     });
   }
 
-  /* ===== تحديث قائمة التخصصات ===== */
-  function updateSpecialtySelect(data) {
-    const select = document.getElementById('specialtySelect');
-    const currentValue = select.value;
+  /* ===== تحديث قوائم التخصصات (الإضافة والحذف) ===== */
+  function updateSpecialtySelects(data) {
+    [ 'specialtySelect', 'deleteSpecialtySelect' ].forEach(function(id) {
+      const select = document.getElementById(id);
+      const currentValue = select.value;
 
-    select.innerHTML = '<option value="">اختر التخصص</option>';
+      select.innerHTML = '<option value="">اختر التخصص</option>';
 
-    data.forEach(function(item) {
-      const option = document.createElement('option');
-      option.value = item.specialty;
-      option.textContent = item.specialty;
-      select.appendChild(option);
+      data.forEach(function(item) {
+        const option = document.createElement('option');
+        option.value = item.specialty;
+        option.textContent = item.specialty;
+        select.appendChild(option);
+      });
+
+      if (currentValue && data.some(item => item.specialty === currentValue)) {
+        select.value = currentValue;
+      }
     });
-
-    if (currentValue && data.some(item => item.specialty === currentValue)) {
-      select.value = currentValue;
-    }
   }
 
-  /* ===== إضافة النقاط ===== */
+  /* ===== إضافة نقاط ===== */
   function addScore() {
+    changeScore('addScore', 'تمت إضافة النقاط بنجاح ✓', 'حدث خطأ أثناء إضافة النقاط');
+  }
+
+  /* ===== حذف نقاط ===== */
+  function removeScore() {
+    changeScore('removeScore', 'تم حذف النقاط بنجاح ✓', 'حدث خطأ أثناء حذف النقاط');
+  }
+
+  function changeScore(action, successMsg, errorMsg) {
     const specialty = document.getElementById('specialtySelect').value;
     const points = document.getElementById('pointsInput').value;
-    const button = document.getElementById('addScoreButton');
+    const addButton = document.getElementById('addScoreButton');
+    const removeButton = document.getElementById('removeScoreButton');
     const message = document.getElementById('scoreMessage');
 
     message.textContent = '';
@@ -478,27 +548,27 @@
       return;
     }
 
-    button.disabled = true;
-    button.textContent = 'جاري الإضافة...';
+    addButton.disabled = true;
+    removeButton.disabled = true;
 
-    const url = `${API_URL}?action=addScore&specialty=${encodeURIComponent(specialty)}&points=${Number(points)}`;
+    const url = `${API_URL}?action=${action}&specialty=${encodeURIComponent(specialty)}&points=${Number(points)}`;
 
     fetch(url)
       .then(r => r.json())
       .then(data => {
         displayScores(data);
-        updateSpecialtySelect(data);
+        updateSpecialtySelects(data);
         document.getElementById('pointsInput').value = '';
-        message.textContent = 'تمت إضافة النقاط بنجاح ✓';
+        message.textContent = successMsg;
         message.className = 'message success';
       })
       .catch(err => {
-        message.textContent = 'حدث خطأ أثناء إضافة النقاط';
+        message.textContent = errorMsg;
         message.className = 'message error';
       })
       .finally(() => {
-        button.disabled = false;
-        button.textContent = 'إضافة النقاط';
+        addButton.disabled = false;
+        removeButton.disabled = false;
       });
   }
 
@@ -526,7 +596,7 @@
       .then(r => r.json())
       .then(data => {
         displayScores(data);
-        updateSpecialtySelect(data);
+        updateSpecialtySelects(data);
         input.value = '';
         document.getElementById('specialtySelect').value = specialty;
         message.textContent = 'تمت إضافة التخصص بنجاح ✓';
@@ -539,6 +609,84 @@
       .finally(() => {
         button.disabled = false;
         button.textContent = 'إضافة التخصص';
+      });
+  }
+
+  /* ===== حذف تخصص (مع رسالة تحذير) ===== */
+  function deleteSpecialty() {
+    const select = document.getElementById('deleteSpecialtySelect');
+    const specialty = select.value;
+    const button = document.getElementById('deleteSpecialtyButton');
+    const message = document.getElementById('specialtyMessage');
+
+    message.textContent = '';
+
+    if (!specialty) {
+      message.textContent = 'يرجى اختيار التخصص المراد حذفه';
+      message.className = 'message error';
+      return;
+    }
+
+    const confirmed = window.confirm(
+      'تحذير: سيتم حذف تخصص "' + specialty + '" بكل نقاطه نهائيًا ولا يمكن التراجع عن هذا الإجراء.\n\nهل أنت متأكدة من المتابعة؟'
+    );
+    if (!confirmed) return;
+
+    button.disabled = true;
+    button.textContent = 'جاري الحذف...';
+
+    const url = `${API_URL}?action=deleteSpecialty&specialty=${encodeURIComponent(specialty)}`;
+
+    fetch(url)
+      .then(r => r.json())
+      .then(data => {
+        displayScores(data);
+        updateSpecialtySelects(data);
+        message.textContent = 'تم حذف التخصص بنجاح ✓';
+        message.className = 'message success';
+      })
+      .catch(err => {
+        message.textContent = 'حدث خطأ أثناء حذف التخصص';
+        message.className = 'message error';
+      })
+      .finally(() => {
+        button.disabled = false;
+        button.textContent = '🗑️ حذف التخصص';
+      });
+  }
+
+  /* ===== إعادة ضبط جميع النقاط (مع رسالة تأكيد) ===== */
+  function resetAllScores() {
+    const button = document.getElementById('resetAllButton');
+    const message = document.getElementById('resetMessage');
+
+    message.textContent = '';
+
+    const confirmed = window.confirm(
+      'تأكيد: سيتم تصفير نقاط جميع التخصصات إلى صفر (التخصصات نفسها تبقى موجودة).\n\nهل أنت متأكدة من المتابعة؟'
+    );
+    if (!confirmed) return;
+
+    button.disabled = true;
+    button.textContent = 'جاري إعادة الضبط...';
+
+    const url = `${API_URL}?action=resetAll`;
+
+    fetch(url)
+      .then(r => r.json())
+      .then(data => {
+        displayScores(data);
+        updateSpecialtySelects(data);
+        message.textContent = 'تمت إعادة ضبط جميع النقاط بنجاح ✓';
+        message.className = 'message success';
+      })
+      .catch(err => {
+        message.textContent = 'حدث خطأ أثناء إعادة الضبط';
+        message.className = 'message error';
+      })
+      .finally(() => {
+        button.disabled = false;
+        button.textContent = 'إعادة ضبط جميع النقاط';
       });
   }
 
