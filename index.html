@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لوحة المتصدرين</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+<style>
+
+  :root{
+    --burgundy: #7c2a49;
+    --burgundy-dark: #5c1f38;
+    --gold: #c9a04e;
+    --gold-light: #e8cf9a;
+    --blush: #fbf1f0;
+    --cream: #fffaf5;
+    --ink: #3a2432;
+    --muted: #9b8a90;
+  }
+
+  *{ box-sizing: border-box; }
+
+  body{
+    margin:0;
+    padding:0;
+    font-family:'Tajawal', Arial, Tahoma, sans-serif;
+    background:
+      radial-gradient(circle at 15% 0%, #fdf2ee 0%, transparent 45%),
+      radial-gradient(circle at 100% 20%, #f6e9ef 0%, transparent 50%),
+      linear-gradient(180deg, #fbf1f0 0%, #f3e4e8 100%);
+    color: var(--ink);
+    min-height:100vh;
+  }
+
+  /* ============================================
+     الشعار الثابت — أعلى اليسار، لا يتحرك أبداً
+     ============================================ */
+  .fixed-logo{
+    position: fixed;
+    top: 16px;
+    left: 16px;
+    z-index: 999;
+    width: 76px;
+    height: 76px;
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 8px 20px rgba(124,42,73,0.22);
+    border: 1px solid rgba(201,160,78,0.35);
+    padding: 8px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  .fixed-logo img{
+    width:100%;
+    height:100%;
+    object-fit: contain;   /* تظهر الصورة كاملة بدون قص */
+    display:block;
+  }
+
+  .container{
+    width:94%;
+    max-width:1180px;
+    margin:0 auto;
+    padding:28px 0 50px;
+  }
+
+  /* ============================================
+     الترويسة (تصميم جديد)
+     ============================================ */
+  .hero{
+    position:relative;
+    text-align:center;
+    padding: 34px 20px 28px;
+    margin-bottom:30px;
+    border-radius:26px;
+    background: linear-gradient(180deg, #ffffff, var(--blush));
+    border: 1px solid rgba(201,160,78,0.28);
+    box-shadow: 0 14px 34px rgba(124,42,73,0.10);
+    overflow:hidden;
+  }
+
+  .hero::before{
+    content:'';
+    position:absolute;
+    top:0; right:0; left:0;
+    height:6px;
+    background: linear-gradient(90deg, var(--burgundy-dark), var(--gold), var(--burgundy-dark));
+  }
+
+  .hero .crown{
+    font-size:24px;
+    display:block;
+    margin-bottom:6px;
+  }
+
+  .hero h1{
+    margin:0;
+    color: var(--burgundy-dark);
+    font-size:30px;
+    font-weight:900;
+  }
+
+  .hero p{
+    margin:10px 0 20px;
+    color: var(--muted);
+    font-size:15px;
+    font-weight:500;
+  }
+
+  .hero-photo{
+    width: 100%;
+    max-width: 420px;
+    height: 150px;
+    margin: 0 auto;
+    border-radius:18px;
+    overflow:hidden;
+    box-shadow: 0 10px 24px rgba(124,42,73,0.16);
+    border: 4px solid #fff;
+  }
+
+  .hero-photo img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+  }
+
+  /* ============================================
+     لوحة المتصدرين
+     ============================================ */
+  .leaderboard{
+    background: linear-gradient(180deg, #ffffff, #fffdfb);
+    border-radius:22px;
+    padding:24px;
+    box-shadow: 0 10px 30px rgba(124,42,73,0.12);
+    border: 1px solid rgba(201,160,78,0.25);
+    margin-bottom:26px;
+  }
+
+  .leaderboard-title{
+    text-align:center;
+    font-size:22px;
+    font-weight:900;
+    color: var(--burgundy-dark);
+    margin-bottom:20px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+  }
+
+  .leaderboard-title::before,
+  .leaderboard-title::after{
+    content:'';
+    height:1px;
+    width:40px;
+    background: linear-gradient(90deg, transparent, var(--gold));
+  }
+  .leaderboard-title::after{
+    background: linear-gradient(90deg, var(--gold), transparent);
+  }
+
+  .score-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    background: linear-gradient(180deg, #fdfaf7, #faf3ef);
+    border: 1px solid rgba(201,160,78,0.18);
+    border-radius:14px;
+    padding:14px 16px;
+    margin-bottom:11px;
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+  }
+
+  .score-row:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(124,42,73,0.12);
+    border-color: rgba(201,160,78,0.45);
+  }
+
+  .score-row.top1{ background: linear-gradient(180deg, #fff8e8, #fdf0d3); border-color: var(--gold); }
+  .score-row.top2{ background: linear-gradient(180deg, #fbf3f6, #f6e8ee); border-color: #cbb3bd; }
+  .score-row.top3{ background: linear-gradient(180deg, #fdf3ec, #f9e6d6); border-color: #d9a468; }
+
+  .rank{
+    width:44px; height:44px;
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:17px; font-weight:900;
+    flex-shrink:0;
+    background: linear-gradient(160deg, #f1e4d8, #e6d5c4);
+    color: var(--burgundy-dark);
+  }
+  .rank.medal{ font-size:22px; background: transparent; }
+
+  .specialty{
+    flex:1;
+    font-size:17px;
+    font-weight:700;
+    padding:0 16px;
+    text-align:right;
+  }
+
+  .points{
+    font-size:16.5px;
+    font-weight:800;
+    color: var(--burgundy-dark);
+    white-space:nowrap;
+    background: rgba(201,160,78,0.14);
+    padding:6px 14px;
+    border-radius:999px;
+  }
+
+  /* ============================================
+     نماذج الإدخال
+     ============================================ */
+  .forms{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:22px;
+  }
+
+  .card{
+    background: linear-gradient(180deg, #ffffff, #fffdfb);
+    border-radius:22px;
+    padding:24px;
+    box-shadow: 0 10px 28px rgba(124,42,73,0.10);
+    border: 1px solid rgba(201,160,78,0.22);
+  }
+
+  .card h2{
+    margin:0 0 16px;
+    text-align:center;
+    color: var(--burgundy-dark);
+    font-size:19px;
+    font-weight:900;
+  }
+
+  label.field-label{
+    display:block;
+    font-size:13px;
+    font-weight:700;
+    color: var(--muted);
+    margin:12px 2px 0;
+  }
+
+  input, select{
+    width:100%;
+    padding:13px 14px;
+    margin-top:6px;
+    border:1.5px solid #ecdfe0;
+    border-radius:12px;
+    font-size:15.5px;
+    font-family:inherit;
+    background:#fffdfb;
+    outline:none;
+    color: var(--ink);
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  input:focus, select:focus{
+    border-color: var(--gold);
+    box-shadow: 0 0 0 4px rgba(201,160,78,0.15);
+  }
+
+  button{
+    width:100%;
+    padding:14px;
+    margin-top:16px;
+    border:none;
+    border-radius:12px;
+    background: linear-gradient(135deg, var(--burgundy), var(--burgundy-dark));
+    color:#fff;
+    font-size:16px;
+    font-weight:800;
+    font-family:inherit;
+    cursor:pointer;
+    box-shadow: 0 8px 18px rgba(124,42,73,0.28);
+    transition: 0.2s;
+  }
+
+  button:hover{ transform: translateY(-2px); box-shadow: 0 10px 22px rgba(124,42,73,0.36); }
+  button:disabled{ opacity:0.6; cursor:not-allowed; transform:none; }
+
+  .message{
+    text-align:center;
+    margin-top:10px;
+    min-height:22px;
+    font-weight:700;
+    font-size:14px;
+  }
+
+  .success{ color:#2a8f6f; }
+  .error{ color:#c0395a; }
+
+  .loading{
+    text-align:center;
+    padding:34px;
+    color: var(--muted);
+    font-size:16px;
+    font-weight:600;
+  }
+
+  /* ============================================
+     الجوال
+     ============================================ */
+  @media (max-width: 700px){
+    .fixed-logo{ width:56px; height:56px; top:10px; left:10px; border-radius:14px; }
+    .container{ width:94%; padding-top:12px; }
+    .hero{ padding:26px 14px 22px; }
+    .hero h1{ font-size:24px; }
+    .hero-photo{ height:110px; }
+    .forms{ grid-template-columns:1fr; }
+    .score-row{ padding:12px; }
+    .rank{ width:36px; height:36px; font-size:15px; }
+    .rank.medal{ font-size:19px; }
+    .specialty{ font-size:15.5px; padding:0 10px; }
+    .points{ font-size:14.5px; padding:5px 10px; }
+  }
+
+</style>
+</head>
+
+<body>
+
+  <!-- الشعار الثابت أعلى اليسار — لا يتحرك مع التمرير -->
+  <div class="fixed-logo">
+    <img src="images/logo.jpeg" alt="شعار المدرسة">
+  </div>
+
+  <div class="container">
+
+    <!-- الترويسة -->
+    <div class="hero">
+      <span class="crown">👑</span>
+      <h1>لوحة المتصدرين</h1>
+      <p>تابعي ترتيب التخصصات حسب مجموع النقاط</p>
+
+      <div class="hero-photo">
+        <img src="images/header.jpeg" alt="صورة الترويسة">
+      </div>
+    </div>
+
+    <!-- لوحة المتصدرين -->
+    <div class="leaderboard">
+      <div class="leaderboard-title">ترتيب التخصصات</div>
+      <div id="scores">
+        <div class="loading">جاري تحميل النتائج...</div>
+      </div>
+    </div>
+
+    <!-- نماذج الإدخال -->
+    <div class="forms">
+
+      <div class="card">
+        <h2>➕ إضافة نقاط</h2>
+
+        <label class="field-label">التخصص</label>
+        <select id="specialtySelect">
+          <option value="">اختر التخصص</option>
+        </select>
+
+        <label class="field-label">عدد النقاط</label>
+        <input type="number" id="pointsInput" min="1" placeholder="مثال: 10">
+
+        <button id="addScoreButton" onclick="addScore()">إضافة النقاط</button>
+
+        <div id="scoreMessage" class="message"></div>
+      </div>
+
+      <div class="card">
+        <h2>📝 إضافة تخصص جديد</h2>
+
+        <label class="field-label">اسم التخصص</label>
+        <input type="text" id="specialtyInput" placeholder="اكتبي اسم التخصص">
+
+        <button id="addSpecialtyButton" onclick="addSpecialty()">إضافة التخصص</button>
+
+        <div id="specialtyMessage" class="message"></div>
+      </div>
+
+    </div>
+
+  </div>
+
+<script>
+
+  /* ==========================================================
+     ضعي هنا رابط تطبيق الويب (Apps Script) الذي ينتهي بـ /exec
+     ========================================================== */
+  const API_URL = 'https://script.google.com/macros/s/AKfycbznR8zfR9RlWkbKzszy1rh5ZyXDMW_6O04794XG5Oxsa4i0ShH5Pcx9SgWe0l22oOu-
+
+  /* ===== تحميل النقاط ===== */
+  function loadScores() {
+    fetch(API_URL)
+      .then(r => r.json())
+      .then(data => {
+        displayScores(data);
+        updateSpecialtySelect(data);
+      })
+      .catch(err => {
+        console.error(err);
+        document.getElementById('scores').innerHTML =
+          '<div class="message error">حدث خطأ أثناء تحميل النتائج</div>';
+      });
+  }
+
+  /* ===== عرض النقاط ===== */
+  function displayScores(data) {
+    const container = document.getElementById('scores');
+    container.innerHTML = '';
+
+    if (!data || data.length === 0) {
+      container.innerHTML = '<div class="loading">لا توجد نقاط حتى الآن</div>';
+      return;
+    }
+
+    data.forEach(function(item, index) {
+      let medal, rankClass = 'rank', rowClass = 'score-row';
+
+      if (index === 0) { medal = '🥇'; rankClass += ' medal'; rowClass += ' top1'; }
+      else if (index === 1) { medal = '🥈'; rankClass += ' medal'; rowClass += ' top2'; }
+      else if (index === 2) { medal = '🥉'; rankClass += ' medal'; rowClass += ' top3'; }
+      else { medal = index + 1; }
+
+      const row = document.createElement('div');
+      row.className = rowClass;
+      row.innerHTML = `
+        <div class="${rankClass}">${medal}</div>
+        <div class="specialty">${escapeHtml(item.specialty)}</div>
+        <div class="points">${item.points} نقطة</div>
+      `;
+      container.appendChild(row);
+    });
+  }
+
+  /* ===== تحديث قائمة التخصصات ===== */
+  function updateSpecialtySelect(data) {
+    const select = document.getElementById('specialtySelect');
+    const currentValue = select.value;
+
+    select.innerHTML = '<option value="">اختر التخصص</option>';
+
+    data.forEach(function(item) {
+      const option = document.createElement('option');
+      option.value = item.specialty;
+      option.textContent = item.specialty;
+      select.appendChild(option);
+    });
+
+    if (currentValue && data.some(item => item.specialty === currentValue)) {
+      select.value = currentValue;
+    }
+  }
+
+  /* ===== إضافة النقاط ===== */
+  function addScore() {
+    const specialty = document.getElementById('specialtySelect').value;
+    const points = document.getElementById('pointsInput').value;
+    const button = document.getElementById('addScoreButton');
+    const message = document.getElementById('scoreMessage');
+
+    message.textContent = '';
+
+    if (!specialty) {
+      message.textContent = 'يرجى اختيار التخصص';
+      message.className = 'message error';
+      return;
+    }
+    if (!points || Number(points) <= 0) {
+      message.textContent = 'يرجى إدخال عدد نقاط صحيح';
+      message.className = 'message error';
+      return;
+    }
+
+    button.disabled = true;
+    button.textContent = 'جاري الإضافة...';
+
+    const url = `${API_URL}?action=addScore&specialty=${encodeURIComponent(specialty)}&points=${Number(points)}`;
+
+    fetch(url)
+      .then(r => r.json())
+      .then(data => {
+        displayScores(data);
+        updateSpecialtySelect(data);
+        document.getElementById('pointsInput').value = '';
+        message.textContent = 'تمت إضافة النقاط بنجاح ✓';
+        message.className = 'message success';
+      })
+      .catch(err => {
+        message.textContent = 'حدث خطأ أثناء إضافة النقاط';
+        message.className = 'message error';
+      })
+      .finally(() => {
+        button.disabled = false;
+        button.textContent = 'إضافة النقاط';
+      });
+  }
+
+  /* ===== إضافة تخصص ===== */
+  function addSpecialty() {
+    const input = document.getElementById('specialtyInput');
+    const specialty = input.value.trim();
+    const button = document.getElementById('addSpecialtyButton');
+    const message = document.getElementById('specialtyMessage');
+
+    message.textContent = '';
+
+    if (!specialty) {
+      message.textContent = 'يرجى كتابة اسم التخصص';
+      message.className = 'message error';
+      return;
+    }
+
+    button.disabled = true;
+    button.textContent = 'جاري الإضافة...';
+
+    const url = `${API_URL}?action=addSpecialty&specialty=${encodeURIComponent(specialty)}`;
+
+    fetch(url)
+      .then(r => r.json())
+      .then(data => {
+        displayScores(data);
+        updateSpecialtySelect(data);
+        input.value = '';
+        document.getElementById('specialtySelect').value = specialty;
+        message.textContent = 'تمت إضافة التخصص بنجاح ✓';
+        message.className = 'message success';
+      })
+      .catch(err => {
+        message.textContent = 'حدث خطأ أثناء إضافة التخصص';
+        message.className = 'message error';
+      })
+      .finally(() => {
+        button.disabled = false;
+        button.textContent = 'إضافة التخصص';
+      });
+  }
+
+  /* ===== حماية النص ===== */
+  function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  /* ===== تشغيل الصفحة ===== */
+  loadScores();
+  setInterval(loadScores, 10000);
+
+</script>
+
+</body>
+</html>
