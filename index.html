@@ -38,6 +38,73 @@
     min-height:100vh;
   }
 
+  /* ===== شاشة الرقم السري ===== */
+  body.locked .container,
+  body.locked .fixed-logo{ display:none; }
+
+  .lock-screen{
+    display:none;
+    min-height:100vh;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+  }
+  body.locked .lock-screen{ display:flex; }
+
+  .lock-card{
+    width:100%;
+    max-width:380px;
+    text-align:center;
+    background: linear-gradient(180deg, #ffffff, var(--blush));
+    border-radius:26px;
+    padding:34px 26px 28px;
+    border: 1px solid rgba(201,160,78,0.28);
+    box-shadow: 0 14px 34px rgba(124,42,73,0.14);
+    position:relative;
+    overflow:hidden;
+  }
+  .lock-card::before{
+    content:'';
+    position:absolute;
+    top:0; right:0; left:0;
+    height:6px;
+    background: linear-gradient(90deg, var(--burgundy-dark), var(--gold), var(--burgundy-dark));
+  }
+  .lock-logo{
+    width:84px; height:84px;
+    margin:0 auto 14px;
+    background:#fff;
+    border-radius:20px;
+    padding:8px;
+    box-shadow: 0 8px 20px rgba(124,42,73,0.18);
+    border: 1px solid rgba(201,160,78,0.35);
+  }
+  .lock-logo img{ width:100%; height:100%; object-fit:contain; display:block; }
+  .lock-card h1{
+    margin:0 0 6px;
+    color: var(--burgundy-dark);
+    font-size:24px;
+    font-weight:900;
+  }
+  .lock-card p{
+    margin:0 0 14px;
+    color: var(--muted);
+    font-size:14.5px;
+    font-weight:500;
+  }
+  .lock-card input{
+    text-align:center;
+    font-size:22px;
+    letter-spacing:6px;
+    direction:ltr;
+  }
+  .lock-card.shake{ animation: shake 0.4s; }
+  @keyframes shake{
+    0%,100%{ transform:translateX(0); }
+    25%{ transform:translateX(-8px); }
+    75%{ transform:translateX(8px); }
+  }
+
   /* الشعار الثابت — أعلى اليسار، لا يتحرك أبداً */
   .fixed-logo{
     position: fixed;
@@ -369,7 +436,21 @@
 </style>
 </head>
 
-<body>
+<body class="locked">
+
+  <!-- ===== شاشة الرقم السري ===== -->
+  <div class="lock-screen">
+    <form class="lock-card" id="lockCard" onsubmit="checkPin(event)">
+      <div class="lock-logo">
+        <img src="images/logo.jpeg" alt="شعار المدرسة">
+      </div>
+      <h1>🔒 الدخول</h1>
+      <p>أدخلي الرقم السري للمتابعة</p>
+      <input type="password" id="pinInput" inputmode="numeric" autocomplete="off" placeholder="•••••" autofocus>
+      <button type="submit">دخول</button>
+      <div id="pinMessage" class="message"></div>
+    </form>
+  </div>
 
   <div class="fixed-logo">
     <img src="images/logo.jpeg" alt="شعار المدرسة">
@@ -451,6 +532,46 @@
 
   /* ضعي هنا رابط تطبيق الويب (Apps Script) الذي ينتهي بـ /exec */
   const API_URL = 'https://script.google.com/macros/s/AKfycbxtY__oowjzs-wl_kzEQteE7eum25rZlbG06-N9KdbrX0XYMx7REriFTMKLUcnWVSCAJg/exec';
+
+  /* ===== الرقم السري ===== */
+  const PIN = '13384';
+
+  /* تحويل الأرقام العربية (١٢٣) والفارسية إلى أرقام إنجليزية (123) */
+  function normalizeDigits(str) {
+    return String(str)
+      .replace(/[\u0660-\u0669]/g, d => d.charCodeAt(0) - 0x0660)
+      .replace(/[\u06F0-\u06F9]/g, d => d.charCodeAt(0) - 0x06F0)
+      .trim();
+  }
+
+  function checkPin(event) {
+    event.preventDefault();
+    const input = document.getElementById('pinInput');
+    const message = document.getElementById('pinMessage');
+    const card = document.getElementById('lockCard');
+
+    if (normalizeDigits(input.value) === PIN) {
+      try { sessionStorage.setItem('leaderboardUnlocked', '1'); } catch (e) {}
+      unlockPage();
+    } else {
+      message.textContent = 'الرقم السري غير صحيح';
+      message.className = 'message error';
+      input.value = '';
+      input.focus();
+      card.classList.remove('shake');
+      void card.offsetWidth;
+      card.classList.add('shake');
+    }
+  }
+
+  let started = false;
+  function unlockPage() {
+    document.body.classList.remove('locked');
+    if (started) return;
+    started = true;
+    loadScores();
+    setInterval(loadScores, 10000);
+  }
 
 
   /* ===== تحميل النقاط ===== */
@@ -698,8 +819,11 @@
   }
 
   /* ===== تشغيل الصفحة ===== */
-  loadScores();
-  setInterval(loadScores, 10000);
+  (function init() {
+    let unlocked = false;
+    try { unlocked = sessionStorage.getItem('leaderboardUnlocked') === '1'; } catch (e) {}
+    if (unlocked) unlockPage();
+  })();
 
 </script>
 
