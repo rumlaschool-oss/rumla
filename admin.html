@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لوحة المتصدرين</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+<style>
+
+  :root{
+    --burgundy: #7c2a49;
+    --burgundy-dark: #5c1f38;
+    --gold: #c9a04e;
+    --gold-light: #e8cf9a;
+    --blush: #fbf1f0;
+    --cream: #fffaf5;
+    --ink: #3a2432;
+    --muted: #9b8a90;
+    --danger: #b23a52;
+    --danger-dark: #8e2c40;
+  }
+
+  *{ box-sizing: border-box; }
+
+  body{
+    margin:0;
+    padding:0;
+    font-family:'Tajawal', Arial, Tahoma, sans-serif;
+    background:
+      radial-gradient(circle at 15% 0%, #fdf2ee 0%, transparent 45%),
+      radial-gradient(circle at 100% 20%, #f6e9ef 0%, transparent 50%),
+      linear-gradient(180deg, #fbf1f0 0%, #f3e4e8 100%);
+    color: var(--ink);
+    min-height:100vh;
+  }
+
+  /* ===== شاشة الرقم السري ===== */
+  body.locked .container,
+  body.locked .fixed-logo{ display:none; }
+
+  .lock-screen{
+    display:none;
+    min-height:100vh;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+  }
+  body.locked .lock-screen{ display:flex; }
+
+  .lock-card{
+    width:100%;
+    max-width:380px;
+    text-align:center;
+    background: linear-gradient(180deg, #ffffff, var(--blush));
+    border-radius:26px;
+    padding:34px 26px 28px;
+    border: 1px solid rgba(201,160,78,0.28);
+    box-shadow: 0 14px 34px rgba(124,42,73,0.14);
+    position:relative;
+    overflow:hidden;
+  }
+  .lock-card::before{
+    content:'';
+    position:absolute;
+    top:0; right:0; left:0;
+    height:6px;
+    background: linear-gradient(90deg, var(--burgundy-dark), var(--gold), var(--burgundy-dark));
+  }
+  .lock-logo{
+    width:84px; height:84px;
+    margin:0 auto 14px;
+    background:#fff;
+    border-radius:20px;
+    padding:8px;
+    box-shadow: 0 8px 20px rgba(124,42,73,0.18);
+    border: 1px solid rgba(201,160,78,0.35);
+  }
+  .lock-logo img{ width:100%; height:100%; object-fit:contain; display:block; }
+  .lock-card h1{
+    margin:0 0 6px;
+    color: var(--burgundy-dark);
+    font-size:24px;
+    font-weight:900;
+  }
+  .lock-card p{
+    margin:0 0 14px;
+    color: var(--muted);
+    font-size:14.5px;
+    font-weight:500;
+  }
+  .lock-card input{
+    text-align:center;
+    font-size:22px;
+    letter-spacing:6px;
+    direction:ltr;
+  }
+  .lock-card.shake{ animation: shake 0.4s; }
+  @keyframes shake{
+    0%,100%{ transform:translateX(0); }
+    25%{ transform:translateX(-8px); }
+    75%{ transform:translateX(8px); }
+  }
+
+  /* الشعار الثابت — أعلى اليسار، لا يتحرك أبداً */
+  .fixed-logo{
+    position: fixed;
+    top: 16px;
+    left: 16px;
+    z-index: 999;
+    width: 76px;
+    height: 76px;
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 8px 20px rgba(124,42,73,0.22);
+    border: 1px solid rgba(201,160,78,0.35);
+    padding: 8px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  .fixed-logo img{
+    width:100%;
+    height:100%;
+    object-fit: contain;
+    display:block;
+  }
+
+  .container{
+    width:94%;
+    max-width:1180px;
+    margin:0 auto;
+    padding:28px 0 50px;
+  }
+
+  /* الترويسة — الصورة أعلى، والعنوان أسفلها */
+  .hero{
+    position:relative;
+    text-align:center;
+    padding: 26px 20px 30px;
+    margin-bottom:30px;
+    border-radius:26px;
+    background: linear-gradient(180deg, #ffffff, var(--blush));
+    border: 1px solid rgba(201,160,78,0.28);
+    box-shadow: 0 14px 34px rgba(124,42,73,0.10);
+    overflow:hidden;
+  }
+
+  .hero::before{
+    content:'';
+    position:absolute;
+    top:0; right:0; left:0;
+    height:6px;
+    background: linear-gradient(90deg, var(--burgundy-dark), var(--gold), var(--burgundy-dark));
+  }
+
+  .hero-photo{
+    width: 100%;
+    max-width: 420px;
+    height: 150px;
+    margin: 10px auto 20px;
+    border-radius:18px;
+    overflow:hidden;
+    box-shadow: 0 10px 24px rgba(124,42,73,0.16);
+    border: 4px solid #fff;
+  }
+
+  .hero-photo img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+  }
+
+  .hero .crown{
+    font-size:24px;
+    display:block;
+    margin-bottom:6px;
+  }
+
+  .hero h1{
+    margin:0;
+    color: var(--burgundy-dark);
+    font-size:30px;
+    font-weight:900;
+  }
+
+  .hero p{
+    margin:10px 0 0;
+    color: var(--muted);
+    font-size:15px;
+    font-weight:500;
+  }
+
+  /* لوحة المتصدرين */
+  .leaderboard{
+    background: linear-gradient(180deg, #ffffff, #fffdfb);
+    border-radius:22px;
+    padding:24px;
+    box-shadow: 0 10px 30px rgba(124,42,73,0.12);
+    border: 1px solid rgba(201,160,78,0.25);
+    margin-bottom:26px;
+  }
+
+  .leaderboard-title{
+    text-align:center;
+    font-size:22px;
+    font-weight:900;
+    color: var(--burgundy-dark);
+    margin-bottom:20px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+  }
+
+  .leaderboard-title::before,
+  .leaderboard-title::after{
+    content:'';
+    height:1px;
+    width:40px;
+    background: linear-gradient(90deg, transparent, var(--gold));
+  }
+  .leaderboard-title::after{
+    background: linear-gradient(90deg, var(--gold), transparent);
+  }
+
+  .score-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    background: linear-gradient(180deg, #fdfaf7, #faf3ef);
+    border: 1px solid rgba(201,160,78,0.18);
+    border-radius:14px;
+    padding:14px 16px;
+    margin-bottom:11px;
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+  }
+
+  .score-row:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(124,42,73,0.12);
+    border-color: rgba(201,160,78,0.45);
+  }
+
+  .score-row.top1{ background: linear-gradient(180deg, #fff8e8, #fdf0d3); border-color: var(--gold); }
+  .score-row.top2{ background: linear-gradient(180deg, #fbf3f6, #f6e8ee); border-color: #cbb3bd; }
+  .score-row.top3{ background: linear-gradient(180deg, #fdf3ec, #f9e6d6); border-color: #d9a468; }
+
+  .rank{
+    width:44px; height:44px;
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:17px; font-weight:900;
+    flex-shrink:0;
+    background: linear-gradient(160deg, #f1e4d8, #e6d5c4);
+    color: var(--burgundy-dark);
+  }
+  .rank.medal{ font-size:22px; background: transparent; }
+
+  .specialty{
+    flex:1;
+    font-size:17px;
+    font-weight:700;
+    padding:0 16px;
+    text-align:right;
+  }
+
+  .points{
+    font-size:16.5px;
+    font-weight:800;
+    color: var(--burgundy-dark);
+    white-space:nowrap;
+    background: rgba(201,160,78,0.14);
+    padding:6px 14px;
+    border-radius:999px;
+  }
+
+  /* نماذج الإدخال */
+  .forms{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:22px;
+  }
+
+  .card{
+    background: linear-gradient(180deg, #ffffff, #fffdfb);
+    border-radius:22px;
+    padding:24px;
+    box-shadow: 0 10px 28px rgba(124,42,73,0.10);
+    border: 1px solid rgba(201,160,78,0.22);
+  }
+
+  .card h2{
+    margin:0 0 16px;
+    text-align:center;
+    color: var(--burgundy-dark);
+    font-size:19px;
+    font-weight:900;
+  }
+
+  label.field-label{
+    display:block;
+    font-size:13px;
+    font-weight:700;
+    color: var(--muted);
+    margin:12px 2px 0;
+  }
+
+  input, select{
+    width:100%;
+    padding:13px 14px;
+    margin-top:6px;
+    border:1.5px solid #ecdfe0;
+    border-radius:12px;
+    font-size:15.5px;
+    font-family:inherit;
+    background:#fffdfb;
+    outline:none;
+    color: var(--ink);
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  input:focus, select:focus{
+    border-color: var(--gold);
+    box-shadow: 0 0 0 4px rgba(201,160,78,0.15);
+  }
+
+  button{
+    width:100%;
+    padding:14px;
+    margin-top:12px;
+    border:none;
+    border-radius:12px;
+    background: linear-gradient(135deg, var(--burgundy), var(--burgundy-dark));
+    color:#fff;
+    font-size:16px;
+    font-weight:800;
+    font-family:inherit;
+    cursor:pointer;
+    box-shadow: 0 8px 18px rgba(124,42,73,0.28);
+    transition: 0.2s;
+  }
+
+  button:hover{ transform: translateY(-2px); box-shadow: 0 10px 22px rgba(124,42,73,0.36); }
+  button:disabled{ opacity:0.6; cursor:not-allowed; transform:none; }
+
+  .button-row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+  }
+  .button-row button{ margin-top:12px; }
+
+  button.danger{
+    background: linear-gradient(135deg, var(--danger), var(--danger-dark));
+    box-shadow: 0 8px 18px rgba(178,58,82,0.28);
+  }
+  button.danger:hover{ box-shadow: 0 10px 22px rgba(178,58,82,0.36); }
+
+  button.outline{
+    background: #fff;
+    color: var(--burgundy-dark);
+    border: 1.5px solid rgba(124,42,73,0.35);
+    box-shadow:none;
+  }
+  button.outline:hover{
+    background: var(--blush);
+    box-shadow:none;
+  }
+
+  .message{
+    text-align:center;
+    margin-top:10px;
+    min-height:22px;
+    font-weight:700;
+    font-size:14px;
+  }
+
+  .success{ color:#2a8f6f; }
+  .error{ color:#c0395a; }
+
+  .loading{
+    text-align:center;
+    padding:34px;
+    color: var(--muted);
+    font-size:16px;
+    font-weight:600;
+  }
+
+  /* منطقة خطِرة */
+  .danger-zone{
+    margin-top:22px;
+    background: linear-gradient(180deg, #fff6f3, #fdeceb);
+    border-radius:22px;
+    padding:22px;
+    border: 1px solid rgba(178,58,82,0.25);
+    box-shadow: 0 10px 26px rgba(178,58,82,0.08);
+  }
+
+  .danger-zone h2{
+    margin:0 0 6px;
+    text-align:center;
+    color: var(--danger-dark);
+    font-size:18px;
+    font-weight:900;
+  }
+
+  .danger-zone p{
+    text-align:center;
+    color: var(--muted);
+    font-size:13.5px;
+    margin:0 0 4px;
+  }
+
+  /* الجوال */
+  @media (max-width: 700px){
+    .fixed-logo{ width:56px; height:56px; top:10px; left:10px; border-radius:14px; }
+    .container{ width:94%; padding-top:12px; }
+    .hero{ padding:20px 14px 24px; }
+    .hero h1{ font-size:24px; }
+    .hero-photo{ height:110px; }
+    .forms{ grid-template-columns:1fr; }
+    .button-row{ grid-template-columns:1fr; }
+    .score-row{ padding:12px; }
+    .rank{ width:36px; height:36px; font-size:15px; }
+    .rank.medal{ font-size:19px; }
+    .specialty{ font-size:15.5px; padding:0 10px; }
+    .points{ font-size:14.5px; padding:5px 10px; }
+  }
+
+</style>
+</head>
+
+<body class="locked">
+
+  <!-- ===== شاشة الرقم السري ===== -->
+  <div class="lock-screen">
+    <form class="lock-card" id="lockCard" onsubmit="checkPin(event)">
+      <div class="lock-logo">
+        <img src="images/logo.jpeg" alt="شعار المدرسة">
+      </div>
+      <h1>🔒 الدخول</h1>
+      <p>أدخلي الرقم السري للمتابعة</p>
+      <input type="password" id="pinInput" inputmode="numeric" autocomplete="off" placeholder="•••••" autofocus>
+      <button type="submit">دخول</button>
+      <div id="pinMessage" class="message"></div>
+    </form>
+  </div>
+
+  <div class="fixed-logo">
+    <img src="images/logo.jpeg" alt="شعار المدرسة">
+  </div>
+
+  <div class="container">
+
+    <!-- الترويسة: الصورة أعلى، والعنوان أسفلها -->
+    <div class="hero">
+      <div class="hero-photo">
+        <img src="images/header.jpeg" alt="صورة الترويسة">
+      </div>
+      <span class="crown">👑</span>
+      <h1>لوحة المتصدرين</h1>
+      <p>تابعي ترتيب التخصصات حسب مجموع النقاط</p>
+    </div>
+
+    <!-- لوحة المتصدرين -->
+    <div class="leaderboard">
+      <div class="leaderboard-title">ترتيب التخصصات</div>
+      <div id="scores">
+        <div class="loading">جاري تحميل النتائج...</div>
+      </div>
+    </div>
+
+    <!-- نماذج الإدخال -->
+    <div class="forms">
+
+      <div class="card">
+        <h2>🏅 إدارة النقاط</h2>
+
+        <label class="field-label">التخصص</label>
+        <select id="specialtySelect">
+          <option value="">اختر التخصص</option>
+        </select>
+
+        <label class="field-label">عدد النقاط</label>
+        <input type="number" id="pointsInput" min="1" placeholder="مثال: 10">
+
+        <div class="button-row">
+          <button id="addScoreButton" onclick="addScore()">➕ إضافة</button>
+          <button id="removeScoreButton" class="danger" onclick="removeScore()">➖ حذف</button>
+        </div>
+
+        <div id="scoreMessage" class="message"></div>
+      </div>
+
+      <div class="card">
+        <h2>📝 إدارة التخصصات</h2>
+
+        <label class="field-label">اسم التخصص الجديد</label>
+        <input type="text" id="specialtyInput" placeholder="اكتبي اسم التخصص">
+
+        <button id="addSpecialtyButton" onclick="addSpecialty()">إضافة التخصص</button>
+
+        <label class="field-label">حذف تخصص موجود</label>
+        <select id="deleteSpecialtySelect">
+          <option value="">اختر التخصص</option>
+        </select>
+
+        <button id="deleteSpecialtyButton" class="danger" onclick="deleteSpecialty()">🗑️ حذف التخصص</button>
+
+        <div id="specialtyMessage" class="message"></div>
+      </div>
+
+    </div>
+
+    <!-- منطقة خطِرة -->
+    <div class="danger-zone">
+      <h2>⚠️ إعادة ضبط النقاط</h2>
+      <p>سيتم تصفير نقاط جميع التخصصات دون حذفها.</p>
+      <button id="resetAllButton" class="outline" onclick="resetAllScores()">إعادة ضبط جميع النقاط</button>
+      <div id="resetMessage" class="message"></div>
+    </div>
+
+  </div>
+
+<script>
+
+  /* ضعي هنا رابط تطبيق الويب (Apps Script) الذي ينتهي بـ /exec */
+  const API_URL = 'https://script.google.com/macros/s/AKfycbxtY__oowjzs-wl_kzEQteE7eum25rZlbG06-N9KdbrX0XYMx7REriFTMKLUcnWVSCAJg/exec';
+
+  /* ===== الرقم السري ===== */
+  const PIN = '13384';
+
+  /* تحويل الأرقام العربية (١٢٣) والفارسية إلى أرقام إنجليزية (123) */
+  function normalizeDigits(str) {
+    return String(str)
+      .replace(/[\u0660-\u0669]/g, d => d.charCodeAt(0) - 0x0660)
+      .replace(/[\u06F0-\u06F9]/g, d => d.charCodeAt(0) - 0x06F0)
+      .trim();
+  }
+
+  function checkPin(event) {
+    event.preventDefault();
+    const input = document.getElementById('pinInput');
+    const message = document.getElementById('pinMessage');
+    const card = document.getElementById('lockCard');
+
+    if (normalizeDigits(input.value) === PIN) {
+      try { sessionStorage.setItem('leaderboardUnlocked', '1'); } catch (e) {}
+      unlockPage();
+    } else {
+      message.textContent = 'الرقم السري غير صحيح';
+      message.className = 'message error';
+      input.value = '';
+      input.focus();
+      card.classList.remove('shake');
+      void card.offsetWidth;
+      card.classList.add('shake');
+    }
+  }
+
+  let started = false;
+  function unlockPage() {
+    document.body.classList.remove('locked');
+    if (started) return;
+    started = true;
+    loadScores();
+    setInterval(loadScores, 10000);
+  }
+
+
+  /* ===== تحميل النقاط ===== */
+  function loadScores() {
+    fetch(API_URL)
+      .then(r => r.json())
+      .then(data => {
+        displayScores(data);
+        updateSpecialtySelects(data);
+      })
+      .catch(err => {
+        console.error(err);
+        document.getElementById('scores').innerHTML =
+          '<div class="message error">حدث خطأ أثناء تحميل النتائج</div>';
+      });
+  }
+
+  /* ===== عرض النقاط ===== */
+  function displayScores(data) {
+    const container = document.getElementById('scores');
+    container.innerHTML = '';
+
+    if (!data || data.length === 0) {
+      container.innerHTML = '<div class="loading">لا توجد نقاط حتى الآن</div>';
+      return;
+    }
+
+    data.forEach(function(item, index) {
+      let medal, rankClass = 'rank', rowClass = 'score-row';
+
+      if (index === 0) { medal = '🥇'; rankClass += ' medal'; rowClass += ' top1'; }
+      else if (index === 1) { medal = '🥈'; rankClass += ' medal'; rowClass += ' top2'; }
+      else if (index === 2) { medal = '🥉'; rankClass += ' medal'; rowClass += ' top3'; }
+      else { medal = index + 1; }
+
+      const row = document.createElement('div');
+      row.className = rowClass;
+      row.innerHTML = `
+        <div class="${rankClass}">${medal}</div>
+        <div class="specialty">${escapeHtml(item.specialty)}</div>
+        <div class="points">${item.points} نقطة</div>
+      `;
+      container.appendChild(row);
+    });
+  }
+
+  /* ===== تحديث قوائم التخصصات (الإضافة والحذف) ===== */
+  function updateSpecialtySelects(data) {
+    [ 'specialtySelect', 'deleteSpecialtySelect' ].forEach(function(id) {
+      const select = document.getElementById(id);
+      const currentValue = select.value;
+
+      select.innerHTML = '<option value="">اختر التخصص</option>';
+
+      data.forEach(function(item) {
+        const option = document.createElement('option');
+        option.value = item.specialty;
+        option.textContent = item.specialty;
+        select.appendChild(option);
+      });
+
+      if (currentValue && data.some(item => item.specialty === currentValue)) {
+        select.value = currentValue;
+      }
+    });
+  }
+
+  /* ===== إضافة نقاط ===== */
+  function addScore() {
+    changeScore('addScore', 'تمت إضافة النقاط بنجاح ✓', 'حدث خطأ أثناء إضافة النقاط');
+  }
+
+  /* ===== حذف نقاط ===== */
+  function removeScore() {
+    changeScore('removeScore', 'تم حذف النقاط بنجاح ✓', 'حدث خطأ أثناء حذف النقاط');
+  }
+
+  function changeScore(action, successMsg, errorMsg) {
+    const specialty = document.getElementById('specialtySelect').value;
+    const points = document.getElementById('pointsInput').value;
+    const addButton = document.getElementById('addScoreButton');
+    const removeButton = document.getElementById('removeScoreButton');
+    const message = document.getElementById('scoreMessage');
+
+    message.textContent = '';
+
+    if (!specialty) {
+      message.textContent = 'يرجى اختيار التخصص';
+      message.className = 'message error';
+      return;
+    }
+    if (!points || Number(points) <= 0) {
+      message.textContent = 'يرجى إدخال عدد نقاط صحيح';
+      message.className = 'message error';
+      return;
+    }
+
+    addButton.disabled = true;
+    removeButton.disabled = true;
+
+    const url = `${API_URL}?action=${action}&specialty=${encodeURIComponent(specialty)}&points=${Number(points)}`;
+
+    fetch(url)
+      .then(r => r.json())
+      .then(data => {
+        displayScores(data);
+        updateSpecialtySelects(data);
+        document.getElementById('pointsInput').value = '';
+        message.textContent = successMsg;
+        message.className = 'message success';
+      })
+      .catch(err => {
+        message.textContent = errorMsg;
+        message.className = 'message error';
+      })
+      .finally(() => {
+        addButton.disabled = false;
+        removeButton.disabled = false;
+      });
+  }
+
+  /* ===== إضافة تخصص ===== */
+  function addSpecialty() {
+    const input = document.getElementById('specialtyInput');
+    const specialty = input.value.trim();
+    const button = document.getElementById('addSpecialtyButton');
+    const message = document.getElementById('specialtyMessage');
+
+    message.textContent = '';
+
+    if (!specialty) {
+      message.textContent = 'يرجى كتابة اسم التخصص';
+      message.className = 'message error';
+      return;
+    }
+
+    button.disabled = true;
+    button.textContent = 'جاري الإضافة...';
+
+    const url = `${API_URL}?action=addSpecialty&specialty=${encodeURIComponent(specialty)}`;
+
+    fetch(url)
+      .then(r => r.json())
+      .then(data => {
+        displayScores(data);
+        updateSpecialtySelects(data);
+        input.value = '';
+        document.getElementById('specialtySelect').value = specialty;
+        message.textContent = 'تمت إضافة التخصص بنجاح ✓';
+        message.className = 'message success';
+      })
+      .catch(err => {
+        message.textContent = 'حدث خطأ أثناء إضافة التخصص';
+        message.className = 'message error';
+      })
+      .finally(() => {
+        button.disabled = false;
+        button.textContent = 'إضافة التخصص';
+      });
+  }
+
+  /* ===== حذف تخصص (مع رسالة تحذير) ===== */
+  function deleteSpecialty() {
+    const select = document.getElementById('deleteSpecialtySelect');
+    const specialty = select.value;
+    const button = document.getElementById('deleteSpecialtyButton');
+    const message = document.getElementById('specialtyMessage');
+
+    message.textContent = '';
+
+    if (!specialty) {
+      message.textContent = 'يرجى اختيار التخصص المراد حذفه';
+      message.className = 'message error';
+      return;
+    }
+
+    const confirmed = window.confirm(
+      'تحذير: سيتم حذف تخصص "' + specialty + '" بكل نقاطه نهائيًا ولا يمكن التراجع عن هذا الإجراء.\n\nهل أنت متأكدة من المتابعة؟'
+    );
+    if (!confirmed) return;
+
+    button.disabled = true;
+    button.textContent = 'جاري الحذف...';
+
+    const url = `${API_URL}?action=deleteSpecialty&specialty=${encodeURIComponent(specialty)}`;
+
+    fetch(url)
+      .then(r => r.json())
+      .then(data => {
+        displayScores(data);
+        updateSpecialtySelects(data);
+        message.textContent = 'تم حذف التخصص بنجاح ✓';
+        message.className = 'message success';
+      })
+      .catch(err => {
+        message.textContent = 'حدث خطأ أثناء حذف التخصص';
+        message.className = 'message error';
+      })
+      .finally(() => {
+        button.disabled = false;
+        button.textContent = '🗑️ حذف التخصص';
+      });
+  }
+
+  /* ===== إعادة ضبط جميع النقاط (مع رسالة تأكيد) ===== */
+  function resetAllScores() {
+    const button = document.getElementById('resetAllButton');
+    const message = document.getElementById('resetMessage');
+
+    message.textContent = '';
+
+    const confirmed = window.confirm(
+      'تأكيد: سيتم تصفير نقاط جميع التخصصات إلى صفر (التخصصات نفسها تبقى موجودة).\n\nهل أنت متأكدة من المتابعة؟'
+    );
+    if (!confirmed) return;
+
+    button.disabled = true;
+    button.textContent = 'جاري إعادة الضبط...';
+
+    const url = `${API_URL}?action=resetAll`;
+
+    fetch(url)
+      .then(r => r.json())
+      .then(data => {
+        displayScores(data);
+        updateSpecialtySelects(data);
+        message.textContent = 'تمت إعادة ضبط جميع النقاط بنجاح ✓';
+        message.className = 'message success';
+      })
+      .catch(err => {
+        message.textContent = 'حدث خطأ أثناء إعادة الضبط';
+        message.className = 'message error';
+      })
+      .finally(() => {
+        button.disabled = false;
+        button.textContent = 'إعادة ضبط جميع النقاط';
+      });
+  }
+
+  /* ===== حماية النص ===== */
+  function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  /* ===== تشغيل الصفحة ===== */
+  (function init() {
+    let unlocked = false;
+    try { unlocked = sessionStorage.getItem('leaderboardUnlocked') === '1'; } catch (e) {}
+    if (unlocked) unlockPage();
+  })();
+
+</script>
+
+</body>
+</html>
